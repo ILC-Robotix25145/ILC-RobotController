@@ -1,6 +1,4 @@
 package org.firstinspires.ftc.teamcode.Util;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,16 +7,11 @@ public class Hardware {
     // Flags
     public static final int NO_FAIL = 1 << 0;
     public static final int NO_LOG = 1 << 1;
+    public static final int DEFAULT_FLAGS = 0;
 
     private int flags = 0;
     private Telemetry telemetry;
     private HardwareMap hardwareMap;
-
-    // Chasis Subsystem
-    public DcMotor frontLeft;
-    public DcMotor frontRight;
-    public DcMotor backLeft;
-    public DcMotor backRight;
 
 
     public void init(int flags, Telemetry telemetry, HardwareMap hardwareMap) {
@@ -37,29 +30,29 @@ public class Hardware {
         }
     }
 
-    public void initSubsystemIntake() {
-        if (((flags & NO_LOG) == 0)) {
-            telemetry.addLine("Initializing Intake");
+    public <T> T get(Class<? extends T> type, String name) {
+        try {
+            T device = hardwareMap.get(type, name);
+            if (!hasFlag(NO_LOG))
+                telemetry.addData("Hardware", "%s -> %s", name, type.getSimpleName());
+            return device;
+        } catch (Exception e) {
+            if (!hasFlag(NO_LOG))
+                telemetry.addData(
+                        "Hardware Error",
+                        "%s (%s): %s",
+                        name,
+                        type.getSimpleName(),
+                        e.getMessage()
+                );
+
+            if (hasFlag(NO_FAIL))
+                return null;
+            throw e;
         }
     }
 
-    public void initSubsystemChassis() {
-        if ((flags & NO_LOG) == 0) {
-            telemetry.addLine("Initializing Chassis");
-        }
-
-        try {
-            frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-            frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-            backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-            backRight = hardwareMap.get(DcMotor.class, "backRight");
-        } catch (Exception e) {
-            if ((flags & NO_FAIL) == 0)
-                throw e;
-
-            if ((flags & NO_LOG) == 0) {
-                telemetry.addData("Caught exception", "msg=\"%s\"", e.getMessage());
-            }
-        }
+    private boolean hasFlag(int flag) {
+        return (flags & flag) != 0;
     }
 }
