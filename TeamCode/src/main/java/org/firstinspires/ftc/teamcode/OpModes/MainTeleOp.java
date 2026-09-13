@@ -24,14 +24,17 @@ public class MainTeleOp extends OpMode {
     @Override
     public void init() {
         logger = new Logger(telemetry);
-        hardware = new Hardware(hardwareMap, logger);
+        logger.infoLine("Initializing Main TeleOp");
 
+        hardware = new Hardware(hardwareMap, logger);
         intake = new IntakeSubsystem(hardware, logger);
         chassis = new ChassisSubsystem(hardware, logger);
 
+        logger.infoLine("Initializing subsystems");
         intake.init();
         chassis.init();
 
+        logger.infoLine("Main TeleOp initialized");
         telemetry.update();
     }
 
@@ -47,6 +50,13 @@ public class MainTeleOp extends OpMode {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rotation = gamepad1.right_stick_x;
+        logger.debug(
+                "Chassis",
+                "y=%.2f x=%.2f rotation=%.2f",
+                y,
+                x,
+                rotation
+        );
         chassis.drive(y, x, rotation);
 
         telemetry.update();

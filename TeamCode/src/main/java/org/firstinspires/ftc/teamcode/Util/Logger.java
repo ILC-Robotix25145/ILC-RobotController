@@ -15,7 +15,7 @@ public class Logger {
     private final Telemetry telemetry;
 
     public Logger(Telemetry telemetry) {
-        this(telemetry, Level.INFO);
+        this(telemetry, Level.DEBUG);
     }
     public Logger(Telemetry telemetry, Level level) {
         this.telemetry = telemetry;
