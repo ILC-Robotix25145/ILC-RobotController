@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Util.Hardware;
 import org.firstinspires.ftc.teamcode.Util.Logger;
+import org.firstinspires.ftc.teamcode.Util.RobotConfig;
 
 @TeleOp(name = "Main TeleOp", group = "Kickoff")
 public class MainTeleOp extends OpMode {
@@ -24,6 +25,7 @@ public class MainTeleOp extends OpMode {
     @Override
     public void init() {
         logger = new Logger(telemetry);
+        logger.infoLine(RobotConfig.description());
         logger.infoLine("Initializing Main TeleOp");
 
         hardware = new Hardware(hardwareMap, logger);
