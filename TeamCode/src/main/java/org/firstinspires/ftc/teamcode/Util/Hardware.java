@@ -19,7 +19,7 @@ public class Hardware {
         this.telemetry = telemetry;
         this.hardwareMap = hardwareMap;
 
-        if ((flags & NO_LOG) == 0) {
+        if (!hasFlag(NO_LOG)) {
             telemetry.addLine("Initializing Hardware");
             telemetry.addData(
                     "Flags",

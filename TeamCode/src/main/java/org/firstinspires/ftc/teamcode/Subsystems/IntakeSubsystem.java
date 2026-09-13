@@ -4,13 +4,13 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Util.Hardware;
 
-public class Intake extends Subsystem {
+public class IntakeSubsystem extends Subsystem {
     static final double POWER = 1.0;
 
     private DcMotor intakeMotor;
     private Gamepad gamepad;
 
-    public Intake(Hardware hardware) {
+    public IntakeSubsystem(Hardware hardware) {
         super(hardware);
     }
 
