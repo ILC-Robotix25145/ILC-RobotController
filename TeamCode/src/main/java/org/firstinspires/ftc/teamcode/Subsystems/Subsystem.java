@@ -1,15 +1,15 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
-import com.qualcomm.robotcore.hardware.Gamepad;
-
 import org.firstinspires.ftc.teamcode.Util.Hardware;
+import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public abstract class Subsystem {
     protected Hardware hardware;
 
-    public Subsystem(Hardware hardware) {
+    public Subsystem(Hardware hardware, Logger logger) {
         this.hardware = hardware;
     }
 
-    public abstract void init(Gamepad gamepad);
-    public abstract void update();
+    public void init() {}
+    public void update() {}
+    public void stop() {}
 }

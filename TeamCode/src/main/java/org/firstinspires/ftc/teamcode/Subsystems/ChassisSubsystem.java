@@ -1,35 +1,29 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Util.Hardware;
+import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class ChassisSubsystem extends Subsystem {
     private static final double STRAFE_MULTIPLIER = 1.1;
     private static final double DEADZONE = 0.05;
-    private static final double NORMAL_SPEED = 1.0;
-    private static final double SLOW_SPEED = 0.4;
 
-    private Gamepad gamepad;
+    private final DcMotor frontLeft;
+    private final DcMotor backLeft;
+    private final DcMotor frontRight;
+    private final DcMotor backRight;
 
-    private DcMotor frontLeft;
-    private DcMotor backLeft;
-    private DcMotor frontRight;
-    private DcMotor backRight;
-
-    public ChassisSubsystem(Hardware hardware) {
-        super(hardware);
+    public ChassisSubsystem(Hardware hardware, Logger logger) {
+        super(hardware, logger);
+        frontLeft = hardware.getRequired(DcMotor.class, "frontLeft");
+        backLeft = hardware.getRequired(DcMotor.class, "backLeft");
+        frontRight = hardware.getRequired(DcMotor.class, "frontRight");
+        backRight = hardware.getRequired(DcMotor.class, "backRight");
     }
 
     @Override
-    public void init(Gamepad gamepad) {
-        this.gamepad = gamepad;
-        frontLeft = hardware.get(DcMotor.class, "frontLeft");
-        backLeft = hardware.get(DcMotor.class, "backLeft");
-        frontRight = hardware.get(DcMotor.class, "frontRight");
-        backRight = hardware.get(DcMotor.class, "backRight");
-
+    public void init() {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -41,30 +35,20 @@ public class ChassisSubsystem extends Subsystem {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    @Override
-    public void update() {
-        drive(
-                -gamepad.left_stick_y,
-                gamepad.left_stick_x,
-                gamepad.right_stick_x,
-                gamepad.left_bumper ? SLOW_SPEED : NORMAL_SPEED
-        );
-    }
-
-    private void drive(double y, double x, double rx, double speed) {
+    public void drive(double y, double x, double rotation) {
         y = applyDeadzone(y);
         x = applyDeadzone(x) * STRAFE_MULTIPLIER;
-        rx = applyDeadzone(rx);
+        rotation = applyDeadzone(rotation);
 
         double denominator = Math.max(
-                Math.abs(y) + Math.abs(x) + Math.abs(rx),
+                Math.abs(y) + Math.abs(x) + Math.abs(rotation),
                 1.0
         );
 
-        double frontLeftPower = (y + x + rx) / denominator * speed;
-        double backLeftPower = (y - x + rx) / denominator * speed;
-        double frontRightPower = (y - x - rx) / denominator * speed;
-        double backRightPower = (y + x - rx) / denominator * speed;
+        double frontLeftPower = (y + x + rotation) / denominator;
+        double backLeftPower = (y - x + rotation) / denominator;
+        double frontRightPower = (y - x - rotation) / denominator;
+        double backRightPower = (y + x - rotation) / denominator;
 
         frontLeft.setPower(frontLeftPower);
         backLeft.setPower(backLeftPower);

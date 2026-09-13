@@ -1,58 +1,53 @@
 package org.firstinspires.ftc.teamcode.Util;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class Hardware {
-    // Flags
-    public static final int NO_FAIL = 1 << 0;
-    public static final int NO_LOG = 1 << 1;
-    public static final int DEFAULT_FLAGS = 0;
+    private final HardwareMap hardwareMap;
+    private final Logger logger;
 
-    private int flags = 0;
-    private Telemetry telemetry;
-    private HardwareMap hardwareMap;
-
-
-    public void init(int flags, Telemetry telemetry, HardwareMap hardwareMap) {
-        this.flags = flags;
-        this.telemetry = telemetry;
+    public Hardware(HardwareMap hardwareMap, Logger logger) {
         this.hardwareMap = hardwareMap;
+        this.logger = logger;
+        logger.infoLine("Initializing Hardware");
+    }
 
-        if (!hasFlag(NO_LOG)) {
-            telemetry.addLine("Initializing Hardware");
-            telemetry.addData(
-                    "Flags",
-                    "NO_FAIL=%b, NO_LOG=%b",
-                    (flags & NO_FAIL) != 0,
-                    (flags & NO_LOG) != 0
+    public <T> T getRequired(Class<? extends T> type, String name) {
+        T device = getOptional(type, name);
+
+        if (device == null) {
+            logger.error(
+                    "Hardware",
+                    "Required hardware missing: %s (%s)",
+                    name,
+                    type.getSimpleName()
+            );
+
+            throw new IllegalStateException(
+                    "Required hardware not found: " + name
             );
         }
+
+        return device;
     }
 
-    public <T> T get(Class<? extends T> type, String name) {
-        try {
-            T device = hardwareMap.get(type, name);
-            if (!hasFlag(NO_LOG))
-                telemetry.addData("Hardware", "%s -> %s", name, type.getSimpleName());
-            return device;
-        } catch (Exception e) {
-            if (!hasFlag(NO_LOG))
-                telemetry.addData(
-                        "Hardware Error",
-                        "%s (%s): %s",
-                        name,
-                        type.getSimpleName(),
-                        e.getMessage()
-                );
+    public <T> T getOptional(Class<? extends T> type, String name) {
+        T device = hardwareMap.tryGet(type, name);
 
-            if (hasFlag(NO_FAIL))
-                return null;
-            throw e;
+        if (device != null) {
+            logger.debug(
+                    "Hardware",
+                    "%s -> %s",
+                    name,
+                    type.getSimpleName()
+            );
+        } else {
+            logger.debug(
+                    "Hardware",
+                    "%s -> not found",
+                    name
+            );
         }
-    }
 
-    private boolean hasFlag(int flag) {
-        return (flags & flag) != 0;
+        return device;
     }
 }
