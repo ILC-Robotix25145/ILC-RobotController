@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Util.Hardware;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class ChassisSubsystem extends Subsystem {
@@ -14,16 +14,17 @@ public class ChassisSubsystem extends Subsystem {
     private final DcMotor frontRight;
     private final DcMotor backRight;
 
-    public ChassisSubsystem(Hardware hardware, Logger logger) {
-        super(hardware, logger);
-        frontLeft = hardware.getRequired(DcMotor.class, "frontLeft");
-        backLeft = hardware.getRequired(DcMotor.class, "backLeft");
-        frontRight = hardware.getRequired(DcMotor.class, "frontRight");
-        backRight = hardware.getRequired(DcMotor.class, "backRight");
+    public ChassisSubsystem(HardwareMap hardwareMap, Logger logger) {
+        super(hardwareMap, logger);
+        logger.infoLine("Initializing Chassis subsystem");
+        frontLeft = getHardware(DcMotor.class, "frontLeft");
+        backLeft = getHardware(DcMotor.class, "backLeft");
+        frontRight = getHardware(DcMotor.class, "frontRight");
+        backRight = getHardware(DcMotor.class, "backRight");
     }
 
     @Override
-    public void init() {
+    public void onInit() {
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.FORWARD);
