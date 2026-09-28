@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -10,13 +12,13 @@ public class TurretSubsystem extends Subsystem {
     public double speed = 0.5; // TODO: Add abstraction over this
 
     private final DcMotor turretMotor;
-    private final Servo hoodServo;
+    private final CRServo hoodServo;
 
     public TurretSubsystem(HardwareMap hardwareMap, Logger logger) {
         super(hardwareMap, logger, Requirement.OPTIONAL);
         logger.infoLine("Initializing Turret Subsystem");
         turretMotor = getHardware(DcMotor.class, "turretMotor");
-        hoodServo = getHardware(Servo.class, "hoodServo");
+        hoodServo = getHardware(CRServo.class, "hoodServo");
     }
 
     @Override
@@ -25,7 +27,8 @@ public class TurretSubsystem extends Subsystem {
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turretMotor.setPower(speed);
 
-        hoodServo.setDirection(Servo.Direction.FORWARD);
+        hoodServo.setDirection(CRServo.Direction.FORWARD);
+        hoodServo.setPower(0.0);
     }
 
     @Override
@@ -39,14 +42,14 @@ public class TurretSubsystem extends Subsystem {
         turretMotor.setPower(0.0);
     }
 
-    public void adjustHood(double v) {
+    public void adjustHood(double power) {
         if (!isAvailable())
             return;
 
-        double currentPosition = hoodServo.getPosition();
-        double newPosition = currentPosition + v;
-        newPosition = Math.max(0.0, Math.min(1.0, newPosition));
+        power = Math.max(-1.0, Math.min(1.0, power));
+        if (Math.abs(power) < 0.05)
+            power = 0.0;
 
-        hoodServo.setPosition(newPosition);
+        hoodServo.setPower(power);
     }
 }
