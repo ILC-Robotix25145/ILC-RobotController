@@ -9,8 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class TurretSubsystem extends Subsystem {
-    public double speed = 0.5; // TODO: Add abstraction over this
-
+    private double speed = 0.5;
     private final DcMotor turretMotor;
     private final CRServo hoodServo;
 
@@ -40,6 +39,15 @@ public class TurretSubsystem extends Subsystem {
     public void onStop() {
         speed = 0.0;
         turretMotor.setPower(0.0);
+    }
+
+    public void adjustSpeed(double increment) {
+        speed += increment;
+        speed = Math.max(-1.0, Math.min(1.0, speed));
+    }
+
+    public double getSpeed(){
+        return speed;
     }
 
     public void adjustHood(double power) {

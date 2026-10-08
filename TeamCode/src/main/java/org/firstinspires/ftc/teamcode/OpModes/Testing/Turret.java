@@ -30,16 +30,15 @@ public class Turret extends OpMode {
     public void loop() {
         if (turretSubsystem.isAvailable()) {
             if (gamepad.isJustDown(GamepadInput.LeftBumper))
-                turretSubsystem.speed -= 0.1;
+                turretSubsystem.adjustSpeed(-0.1);
             if (gamepad.isJustDown(GamepadInput.RightBumper))
-                turretSubsystem.speed += 0.1;
-            turretSubsystem.speed = Math.max(-1.0, Math.min(1.0, turretSubsystem.speed));
+                turretSubsystem.adjustSpeed(0.1);
 
             double hoodAdjustment = -gamepad1.right_stick_y;
             turretSubsystem.adjustHood(hoodAdjustment * 0.3);
 
             turretSubsystem.loop();
-            logger.debug("speed=%.2f", turretSubsystem.speed);
+            logger.debug("speed=%.2f", turretSubsystem.getSpeed());
         }
 
         gamepad.update();
