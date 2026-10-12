@@ -6,5 +6,7 @@ public enum GamepadInput {
     LeftTrigger, RightTrigger,
     DpadUp, DpadDown, DpadLeft, DpadRight,
     Start, Back,
-    LeftStickButton, RightStickButton
+    LeftStickButton, RightStickButton,
+    LeftStickY, RightStickY,
+    LeftStickX, RightStickX
 }
