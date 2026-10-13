@@ -34,7 +34,7 @@ public class Turret extends OpMode {
             if (gamepad.isJustDown(GamepadInput.RightBumper))
                 turretSubsystem.adjustSpeed(0.1);
 
-            double hoodAdjustment = -gamepad1.right_stick_y;
+            double hoodAdjustment = -1 * gamepad.getStickPos(GamepadInput.RightStickY);
             turretSubsystem.adjustHood(hoodAdjustment * 0.3);
 
             turretSubsystem.loop();
