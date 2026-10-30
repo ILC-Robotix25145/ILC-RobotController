@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Util.Algebra;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class TurretSubsystem extends Subsystem {
@@ -54,7 +55,7 @@ public class TurretSubsystem extends Subsystem {
         if (!isAvailable())
             return;
 
-        power = Math.max(-1.0, Math.min(1.0, power));
+        power = Algebra.clamp(-1.0, 1.0, power);
         if (Math.abs(power) < 0.05)
             power = 0.0;
 

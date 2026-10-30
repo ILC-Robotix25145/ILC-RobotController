@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Util.Config;
 
+import org.firstinspires.ftc.teamcode.Util.Algebra;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
@@ -89,12 +91,12 @@ public class ConfigRow {
 
             } else if (field.getType() == int.class) {
                 double next = field.getInt(null) + direction * step;
-                field.setInt(null, (int) Math.round(clamp(next)));
+                field.setInt(null, (int) Math.round(Algebra.clamp(min, max, next)));
 
             } else if (field.getType() == double.class) {
                 BigDecimal sum = BigDecimal.valueOf(field.getDouble(null))
                         .add(BigDecimal.valueOf(step).multiply(BigDecimal.valueOf(direction)));
-                field.setDouble(null, clamp(sum.doubleValue()));
+                field.setDouble(null, Algebra.clamp(min, max, sum.doubleValue()));
 
             } else {
                 Object[] values = field.getType().getEnumConstants();
@@ -105,10 +107,6 @@ public class ConfigRow {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private double clamp(double value) {
-        return Math.max(min, Math.min(max, value));
     }
 
     private static String makeLabel(String name) {
