@@ -20,7 +20,15 @@ public class IntakeSubsystem extends Subsystem {
         intakeMotor.setPower(0);
     }
 
+    @Override
+    public void onStop() {
+        intakeMotor.setPower(0);
+    }
+
     public void toggle() {
+        if (!isAvailable())
+            return;
+
         if (!running) {
             intakeMotor.setPower(POWER);
             running = true;

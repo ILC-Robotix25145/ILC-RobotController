@@ -36,7 +36,18 @@ public class ChassisSubsystem extends Subsystem {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    @Override
+    public void onStop() {
+        frontLeft.setPower(0.0);
+        backLeft.setPower(0.0);
+        frontRight.setPower(0.0);
+        backRight.setPower(0.0);
+    }
+
     public void drive(double y, double x, double rotation) {
+        if (!isAvailable())
+            return;
+
         y = applyDeadzone(y);
         x = applyDeadzone(x) * STRAFE_MULTIPLIER;
         rotation = applyDeadzone(rotation);
