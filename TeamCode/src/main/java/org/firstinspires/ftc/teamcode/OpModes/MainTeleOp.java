@@ -3,19 +3,15 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Robot.Robot;
 import org.firstinspires.ftc.teamcode.Util.Logger;
-import org.firstinspires.ftc.teamcode.Util.RobotConfig;
 
 @TeleOp(name = "Main TeleOp", group = "Kickoff")
 public class MainTeleOp extends OpMode {
     // Utils
     Logger logger;
+    Robot robot;
 
-    // Subsystems
-    IntakeSubsystem intake;
-    ChassisSubsystem chassis;
 
     // State
     boolean lastLeftBumper = false;
@@ -23,28 +19,20 @@ public class MainTeleOp extends OpMode {
     @Override
     public void init() {
         logger = new Logger(telemetry);
-        logger.infoLine(RobotConfig.description());
-        logger.infoLine("Initializing Main TeleOp");
-
-        logger.infoLine("Initializing subsystems");
-        intake = new IntakeSubsystem(hardwareMap, logger);
-        intake.init();
-        chassis = new ChassisSubsystem(hardwareMap, logger);
-        chassis.init();
-
-        telemetry.update();
+        robot = new Robot(hardwareMap, logger);
+        robot.init();
     }
 
     @Override
     public void loop() {
-        if (intake.isAvailable()) {
+        if (robot.intake.isAvailable()) {
             boolean leftBumper = gamepad1.left_bumper;
             if (gamepad1.left_bumper && !lastLeftBumper)
-                intake.toggle();
+                robot.intake.toggle();
             lastLeftBumper = leftBumper;
         }
 
-        if (chassis.isAvailable()) {
+        if (robot.chassis.isAvailable()) {
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x;
@@ -54,9 +42,15 @@ public class MainTeleOp extends OpMode {
                     x,
                     rotation
             );
-            chassis.drive(y, x, rotation);
+            robot.chassis.drive(y, x, rotation);
         }
 
+        robot.loop();
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        robot.stop();
     }
 }
