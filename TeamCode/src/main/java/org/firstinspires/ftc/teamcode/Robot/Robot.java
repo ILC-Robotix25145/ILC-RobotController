@@ -35,6 +35,11 @@ public class Robot {
             s.init();
     }
 
+    public void start() {
+        for (Subsystem s : subsystems)
+            s.start();
+    }
+
     public void loop() {
         for (Subsystem s: subsystems)
             s.loop();

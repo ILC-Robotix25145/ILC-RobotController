@@ -27,6 +27,12 @@ public abstract  class CustomOpMode extends OpMode {
     }
 
     @Override
+    public final void start() {
+        robot.start();
+        onStart();
+    }
+
+    @Override
     public final void loop() {
         gm1.update();
         gm2.update();
@@ -45,6 +51,7 @@ public abstract  class CustomOpMode extends OpMode {
     }
 
     protected void onInit() {}
+    protected void onStart() {}
     protected abstract void onLoop();
     protected void onStop() {}
 }
