@@ -14,6 +14,11 @@ public class ChassisSubsystem extends Subsystem {
     private final DcMotor frontRight;
     private final DcMotor backRight;
 
+    private double frontLeftPower = 0.0;
+    private double backLeftPower = 0.0;
+    private double frontRightPower = 0.0;
+    private double backRightPower = 0.0;
+
     public ChassisSubsystem(HardwareMap hardwareMap, Logger logger) {
         super(hardwareMap, logger);
         logger.infoLine("Initializing Chassis subsystem");
@@ -37,7 +42,20 @@ public class ChassisSubsystem extends Subsystem {
     }
 
     @Override
+    public void onLoop() {
+        frontLeft.setPower(frontLeftPower);
+        backLeft.setPower(backLeftPower);
+        frontRight.setPower(frontRightPower);
+        backRight.setPower(backRightPower);
+    }
+
+    @Override
     public void onStop() {
+        frontLeftPower = 0.0;
+        backLeftPower = 0.0;
+        frontRightPower = 0.0;
+        backRightPower = 0.0;
+
         frontLeft.setPower(0.0);
         backLeft.setPower(0.0);
         frontRight.setPower(0.0);
@@ -57,15 +75,10 @@ public class ChassisSubsystem extends Subsystem {
                 1.0
         );
 
-        double frontLeftPower = (y + x + rotation) / denominator;
-        double backLeftPower = (y - x + rotation) / denominator;
-        double frontRightPower = (y - x - rotation) / denominator;
-        double backRightPower = (y + x - rotation) / denominator;
-
-        frontLeft.setPower(frontLeftPower);
-        backLeft.setPower(backLeftPower);
-        frontRight.setPower(frontRightPower);
-        backRight.setPower(backRightPower);
+        frontLeftPower = (y + x + rotation) / denominator;
+        backLeftPower = (y - x + rotation) / denominator;
+        frontRightPower = (y - x - rotation) / denominator;
+        backRightPower = (y + x - rotation) / denominator;
     }
 
     private double applyDeadzone(double value) {

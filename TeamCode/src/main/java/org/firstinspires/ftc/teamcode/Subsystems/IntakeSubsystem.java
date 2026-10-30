@@ -6,7 +6,9 @@ import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class IntakeSubsystem extends Subsystem {
     static final double POWER = 1.0;
+
     private final DcMotor intakeMotor;
+    private double power = 0.0;
     private boolean running = false;
 
     public IntakeSubsystem(HardwareMap hardwareMap, Logger logger) {
@@ -21,6 +23,11 @@ public class IntakeSubsystem extends Subsystem {
     }
 
     @Override
+    public void onLoop() {
+        intakeMotor.setPower(power);
+    }
+
+    @Override
     public void onStop() {
         intakeMotor.setPower(0);
     }
@@ -30,10 +37,10 @@ public class IntakeSubsystem extends Subsystem {
             return;
 
         if (!running) {
-            intakeMotor.setPower(POWER);
+            power = 1.0;
             running = true;
         } else {
-            intakeMotor.setPower(0);
+            power = 0.0;
             running = false;
         }
     }
