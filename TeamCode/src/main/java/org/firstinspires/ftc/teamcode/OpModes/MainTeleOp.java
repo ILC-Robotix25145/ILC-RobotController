@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot.Robot;
+import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadInput;
+import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadManager;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 @TeleOp(name = "Main TeleOp", group = "Kickoff")
@@ -12,25 +14,21 @@ public class MainTeleOp extends OpMode {
     Logger logger;
     Robot robot;
 
+    GamepadManager gm1;
 
-    // State
-    boolean lastLeftBumper = false;
 
     @Override
     public void init() {
         logger = new Logger(telemetry);
         robot = new Robot(hardwareMap, logger);
         robot.init();
+        gm1 = new GamepadManager(gamepad1);
     }
 
     @Override
     public void loop() {
-        if (robot.intake.isAvailable()) {
-            boolean leftBumper = gamepad1.left_bumper;
-            if (gamepad1.left_bumper && !lastLeftBumper)
-                robot.intake.toggle();
-            lastLeftBumper = leftBumper;
-        }
+        if (gm1.isJustDown(GamepadInput.LeftBumper))
+            robot.intake.toggle();
 
         if (robot.chassis.isAvailable()) {
             double y = -gamepad1.left_stick_y;
