@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.OpModes.Testing;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Util.GamepadInput;
-import org.firstinspires.ftc.teamcode.Util.GamepadManager;
+import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadInput;
+import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadManager;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 @TeleOp(name = "Gamepad", group = "Test")
