@@ -6,10 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class TurretSubsystem extends Subsystem {
-    private double speed = 0.5;
+    @Option (min=-1, max=1, step=0.1)
+    public static double speed = 0.5;
     private final DcMotor turretMotor;
     private final CRServo hoodServo;
 

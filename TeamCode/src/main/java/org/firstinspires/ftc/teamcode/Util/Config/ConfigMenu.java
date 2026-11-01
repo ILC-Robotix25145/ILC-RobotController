@@ -15,23 +15,22 @@ public class ConfigMenu {
     private final GamepadManager pad;
     private final OptionsManager manager;
     private final List<ConfigRow> rows = new ArrayList<>();
+    private List<Class<?>> configClasses = new ArrayList<>();
     private int selected = 0;
 
-    public ConfigMenu(Telemetry telemetry, GamepadManager pad, OptionsManager manager, Class<?> settingsClass) {
+    public ConfigMenu(Telemetry telemetry, GamepadManager pad, OptionsManager manager, List<Class<?>> configClasses) {
         this.telemetry = telemetry;
         this.pad = pad;
         this.manager = manager;
+        this.configClasses = configClasses;
         manager.loadAll();
 
-        for (Field field : settingsClass.getDeclaredFields()) {
-            if (isValidField(field)){
-                rows.add(new ConfigRow(field));
+        for (int i=0; i < configClasses.size(); i++){
+            for (Field field : configClasses.get(i).getDeclaredFields()) {
+                if (isValidField(field)){
+                    rows.add(new ConfigRow(field, configClasses.get(i)));
+                }
             }
-        }
-
-        if (rows.isEmpty()) {
-            throw new IllegalArgumentException(settingsClass.getSimpleName()
-                    + " has no public static non-final variables to show");
         }
     }
 
@@ -42,6 +41,7 @@ public class ConfigMenu {
         if (!Modifier.isPublic(mods)) return false;
         if (!Modifier.isStatic(mods))  return false;
         if (Modifier.isFinal(mods)) return false;
+        if (field.getAnnotation(Option.class) == null) return false;
 
         return true;
     }
@@ -69,12 +69,17 @@ public class ConfigMenu {
     }
 
     public void draw() {
+        Class<?> lastRowClass = null;
         telemetry.addLine("=== Robot Config ===");
 
         for (int i = 0; i < rows.size(); i++) {
             ConfigRow row = rows.get(i);
+            if (row.getRowClass() != lastRowClass){
+                telemetry.addLine(row.getRowClass().getSimpleName());
+                lastRowClass = row.getRowClass();
+            }
             String marker = (i == selected) ? "> " : "  ";
-            telemetry.addLine(marker + row.getLabel() + ": " + row.display());
+            telemetry.addLine("  " + marker + row.getLabel() + ": " + row.display());
         }
 
         telemetry.addLine("D-pad: up/down = select, left/right = change, A = save config");

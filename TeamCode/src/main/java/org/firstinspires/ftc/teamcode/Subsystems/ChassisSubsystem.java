@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class ChassisSubsystem extends Subsystem {
-    private static final double STRAFE_MULTIPLIER = 1.1;
-    private static final double DEADZONE = 0.05;
+    @Option(min=1, max=1.5, step=0.1)
+    public static double STRAFE_MULTIPLIER = 1.1;
+    @Option (min=0, max=0.1, step=0.01)
+    public static double DEADZONE = 0.05;
 
     private final DcMotor frontLeft;
     private final DcMotor backLeft;
