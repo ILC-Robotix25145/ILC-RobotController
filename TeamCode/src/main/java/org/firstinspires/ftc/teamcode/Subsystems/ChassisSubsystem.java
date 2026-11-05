@@ -7,11 +7,8 @@ import org.firstinspires.ftc.teamcode.Util.Config.Config;
 import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
-@Config
 public class ChassisSubsystem extends Subsystem {
-    @Option(min=1, max=1.5, step=0.1)
     public static double STRAFE_MULTIPLIER = 1.1;
-    @Option (min=0, max=0.1, step=0.01)
     public static double DEADZONE = 0.05;
 
     private final DcMotor frontLeft;
