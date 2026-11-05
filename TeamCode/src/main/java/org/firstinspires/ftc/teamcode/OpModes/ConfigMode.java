@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Testing.Turret;
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.Util.Config.ConfigClassScanner;
 import org.firstinspires.ftc.teamcode.Util.Config.ConfigMenu;
 import org.firstinspires.ftc.teamcode.Util.Config.Options;
 import org.firstinspires.ftc.teamcode.Util.Config.OptionsManager;
@@ -22,10 +23,8 @@ public class ConfigMode extends LinearOpMode {
     public void runOpMode() {
         GamepadManager pad = new GamepadManager(gamepad1);
 
-        List<Class<?>> configClasses = new ArrayList<>();
-        configClasses.add(ChassisSubsystem.class);
-        configClasses.add(IntakeSubsystem.class);
-        configClasses.add(TurretSubsystem.class);
+        List<Class<?>> configClasses =
+                ConfigClassScanner.findConfigClasses(hardwareMap.appContext);
 
         OptionsManager manger = new OptionsManager(hardwareMap.appContext, configClasses);
         ConfigMenu menu = new ConfigMenu(telemetry, pad, manger, configClasses);
