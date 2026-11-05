@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class IntakeSubsystem extends Subsystem {
-    @Option(min=0, max=1, step=0.1)
     public static double POWER = 1.0;
     private final DcMotor intakeMotor;
     private boolean running = false;

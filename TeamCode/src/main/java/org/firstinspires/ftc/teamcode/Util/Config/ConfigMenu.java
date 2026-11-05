@@ -15,14 +15,12 @@ public class ConfigMenu {
     private final GamepadManager pad;
     private final OptionsManager manager;
     private final List<ConfigRow> rows = new ArrayList<>();
-    private List<Class<?>> configClasses = new ArrayList<>();
     private int selected = 0;
 
     public ConfigMenu(Telemetry telemetry, GamepadManager pad, OptionsManager manager, List<Class<?>> configClasses) {
         this.telemetry = telemetry;
         this.pad = pad;
         this.manager = manager;
-        this.configClasses = configClasses;
         manager.loadAll();
 
         for (int i=0; i < configClasses.size(); i++){
@@ -48,6 +46,9 @@ public class ConfigMenu {
 
     public void update() {
         int count = rows.size();
+        if (count == 0){
+            return;
+        }
 
         if (pad.isJustDown(GamepadInput.DpadDown)) {
             selected = (selected + 1) % count;
@@ -71,6 +72,10 @@ public class ConfigMenu {
     public void draw() {
         Class<?> lastRowClass = null;
         telemetry.addLine("=== Robot Config ===");
+        if (rows.size() == 0){
+            telemetry.addLine("No config options found!");
+            return;
+        }
 
         for (int i = 0; i < rows.size(); i++) {
             ConfigRow row = rows.get(i);
