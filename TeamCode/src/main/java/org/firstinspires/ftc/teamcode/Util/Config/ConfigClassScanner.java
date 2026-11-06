@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Util.Config;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -10,9 +12,7 @@ import java.util.List;
 import dalvik.system.DexFile;
 
 public final class ConfigClassScanner {
-
-    private static final String TAG = "ConfigClassScanner";
-    private static final String TEAM_PACKAGE = "org.firstinspires.ftc.teamcode";
+    private static final String PATH = "org.firstinspires.ftc.teamcode";
 
     private ConfigClassScanner() {}
 
@@ -23,7 +23,7 @@ public final class ConfigClassScanner {
             Enumeration<String> entries = dex.entries();
             while (entries.hasMoreElements()) {
                 String name = entries.nextElement();
-                if (!name.startsWith(TEAM_PACKAGE)) continue;
+                if (!name.startsWith(PATH)) continue;
                 try {
                     Class<?> cls = Class.forName(name, false,
                             ConfigClassScanner.class.getClassLoader());
@@ -32,7 +32,7 @@ public final class ConfigClassScanner {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "Failed to scan DEX for @Config classes", e);
+            telemetry.addLine("Failed to scan DEX for classes");
         }
         return classes;
     }
