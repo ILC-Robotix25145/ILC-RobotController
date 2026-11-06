@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Util.Config.Config;
-import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class ChassisSubsystem extends Subsystem {

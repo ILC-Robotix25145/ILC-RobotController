@@ -27,9 +27,7 @@ public final class ConfigClassScanner {
                 try {
                     Class<?> cls = Class.forName(name, false,
                             ConfigClassScanner.class.getClassLoader());
-                    if (cls.isAnnotationPresent(Config.class)) {
-                        classes.add(cls);
-                    }
+                    classes.add(cls);
                 } catch (Throwable ignored) {
                 }
             }
