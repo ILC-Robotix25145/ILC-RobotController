@@ -7,12 +7,14 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 public class ConfigRow {
     private final Field field;
+
+    private final Class<?> rowClass;
     private final String label;
     private final double min;
     private final double max;
     private final double step;
 
-    public ConfigRow(Field field) {
+    public ConfigRow(Field field, Class<?> rowClass) {
         int mods = field.getModifiers();
         if (!Modifier.isPublic(mods) || !Modifier.isStatic(mods) || Modifier.isFinal(mods)) {
             throw new IllegalArgumentException(
@@ -31,10 +33,11 @@ public class ConfigRow {
         }
 
         this.field = field;
+        this.rowClass = rowClass;
         this.label = makeLabel(field.getName());
 
-        Range range = field.getAnnotation(Range.class);
-        if (range != null) {
+        Option range = field.getAnnotation(Option.class);
+        if (range.min() != 0 || range.max() != 0) {
             if (range.min() > range.max()) {
                 throw new IllegalArgumentException(field.getName() + ": @Range min is bigger than max");
             }
@@ -54,6 +57,7 @@ public class ConfigRow {
     public String getLabel() {
         return label;
     }
+    public Class<?> getRowClass() {return rowClass; }
 
     public void next() {
         change(+1);

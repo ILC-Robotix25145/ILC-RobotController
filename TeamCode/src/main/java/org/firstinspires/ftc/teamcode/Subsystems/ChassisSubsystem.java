@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class ChassisSubsystem extends Subsystem {
-    private static final double STRAFE_MULTIPLIER = 1.1;
-    private static final double DEADZONE = 0.05;
+    public static double STRAFE_MULTIPLIER = 1.1;
+    public static double DEADZONE = 0.05;
 
     private final DcMotor frontLeft;
     private final DcMotor backLeft;

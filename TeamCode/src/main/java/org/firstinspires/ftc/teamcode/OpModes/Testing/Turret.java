@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.Util.Config.Option;
 import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadInput;
 import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadManager;
 import org.firstinspires.ftc.teamcode.Util.Logger;
