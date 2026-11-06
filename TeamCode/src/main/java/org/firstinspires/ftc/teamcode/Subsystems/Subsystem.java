@@ -63,6 +63,12 @@ public abstract class Subsystem {
         onInit();
     }
 
+    public final void start() {
+        if (!available)
+            return;
+        onStart();
+    }
+
     public final void loop() {
         if (!available)
             return;
@@ -80,6 +86,7 @@ public abstract class Subsystem {
     }
 
     protected void onInit() {}
+    protected void onStart() {}
     protected void onLoop() {}
     protected void onStop() {}
 }
