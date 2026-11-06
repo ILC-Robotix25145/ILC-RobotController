@@ -91,40 +91,38 @@ public class OptionsManager {
     }
 
     public void loadAll() {
-        Field[] fields = Options.class.getDeclaredFields();
+        for (int i=0; i < configClasses.size(); i++){
+            for (Field field : configClasses.get(i).getDeclaredFields()) {
 
-        for (Field field : fields) {
-            if (!Modifier.isStatic(field.getModifiers())) {
-                continue;
-            }
+                if (!ConfigMenu.isValidField(field)) {
+                    continue;
+                }
 
-            field.setAccessible(true);
-            String fieldName = field.getName();
+                field.setAccessible(true);
+                String fieldName = field.getName();
 
-            try {
-                if (field.getType() == double.class) {
-                    String valueStr = prefs.getString(fieldName, "0.0");
-                    double valueDouble = Double.parseDouble(valueStr);
-                    field.setDouble(null, valueDouble);
-                }
-                else if (field.getType() == int.class) {
-                    int value = prefs.getInt(fieldName, 0);
-                    field.setInt(null, value);
-                }
-                else if (field.getType() == boolean.class) {
-                    boolean value = prefs.getBoolean(fieldName, false);
-                    field.setBoolean(null, value);
-                }
-                else if (field.getType().isEnum()) {
-                    // Handle enums
-                    String value = prefs.getString(fieldName, null);
-                    if (value != null) {
-                        Object enumValue = Enum.valueOf((Class<Enum>) field.getType(), value);
-                        field.set(null, enumValue);
+                try {
+                    if (field.getType() == double.class) {
+                        String valueStr = prefs.getString(fieldName, "0.0");
+                        double valueDouble = Double.parseDouble(valueStr);
+                        field.setDouble(null, valueDouble);
+                    } else if (field.getType() == int.class) {
+                        int value = prefs.getInt(fieldName, 0);
+                        field.setInt(null, value);
+                    } else if (field.getType() == boolean.class) {
+                        boolean value = prefs.getBoolean(fieldName, false);
+                        field.setBoolean(null, value);
+                    } else if (field.getType().isEnum()) {
+                        // Handle enums
+                        String value = prefs.getString(fieldName, null);
+                        if (value != null) {
+                            Object enumValue = Enum.valueOf((Class<Enum>) field.getType(), value);
+                            field.set(null, enumValue);
+                        }
                     }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
             }
         }
     }
