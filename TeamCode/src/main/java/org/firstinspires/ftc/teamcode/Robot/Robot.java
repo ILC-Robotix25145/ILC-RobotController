@@ -33,6 +33,7 @@ public class Robot {
     public void init() {
         for (Subsystem s : subsystems)
             s.init();
+        turret.setSpeed(0.7);
     }
 
     public void start() {

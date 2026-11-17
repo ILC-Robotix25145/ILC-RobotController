@@ -44,8 +44,7 @@ public class TurretSubsystem extends Subsystem {
         if (!isAvailable())
             return;
 
-        speed += increment;
-        speed = Math.max(-1.0, Math.min(1.0, speed));
+        setSpeed(speed + increment);
     }
 
     public void adjustHood(double power) {
@@ -57,6 +56,13 @@ public class TurretSubsystem extends Subsystem {
             power = 0.0;
 
         hoodServo.setPower(power);
+    }
+
+    public void setSpeed(double newSpeed) {
+        if (!isAvailable())
+            return;
+
+        speed = Algebra.clamp(-1.0, 1.0, newSpeed);
     }
 
     public double getSpeed(){
