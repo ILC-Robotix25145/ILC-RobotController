@@ -2,29 +2,40 @@ package org.firstinspires.ftc.teamcode.OpModes.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Util.Config.Option;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadManager;
+import org.firstinspires.ftc.teamcode.Util.Logger;
 
 @TeleOp(name = "Shooter", group = "Test")
 public class Shooter extends OpMode {
-    DcMotor motorLeft;
-    DcMotor motorRight;
-
-
+    Logger logger;
+    ShooterSubsystem shooterSubsystem;
+    GamepadManager gamepad;
 
     @Override
     public void init() {
-        motorLeft = hardwareMap.get(DcMotor.class, "motor1");
-        motorRight = hardwareMap.get(DcMotor.class, "motor2");
+        logger = new Logger(telemetry);
+        gamepad = new GamepadManager(gamepad1);
+
+        logger.infoLine("Initializing Shooter Subsystem");
+        shooterSubsystem = new ShooterSubsystem(hardwareMap, logger);
+        shooterSubsystem.init();
+
+        telemetry.update();
     }
 
     @Override
     public void loop() {
-        motorLeft.setPower(1.0);
-        motorRight.setPower(1.0);
-        telemetry.addData("Motor 1 Power", motorLeft.getPower());
-        telemetry.addData("Motor 2 Power", motorRight.getPower());
+        if (shooterSubsystem.isAvailable()) {
+            double flywheelPower = gamepad1.right_trigger;
+            shooterSubsystem.setFlywheelPower(flywheelPower);
+
+            shooterSubsystem.loop();
+            logger.debug("flywheel=%.2f", shooterSubsystem.getFlywheelPower());
+        }
+
+        gamepad.update();
         telemetry.update();
     }
 }

@@ -21,23 +21,34 @@ public class TurretSubsystem extends Subsystem {
 
     @Override
     public void onInit() {
-        turretMotor.setDirection(DcMotor.Direction.FORWARD);
-        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretMotor.setPower(speed);
+        if (turretMotor != null) {
+            turretMotor.setDirection(DcMotor.Direction.FORWARD);
+            turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            turretMotor.setPower(speed);
+        }
 
-        hoodServo.setDirection(CRServo.Direction.FORWARD);
-        hoodServo.setPower(0.0);
+        if (hoodServo != null) {
+            hoodServo.setDirection(CRServo.Direction.FORWARD);
+            hoodServo.setPower(0.0);
+        }
     }
 
     @Override
     public void onLoop() {
-        turretMotor.setPower(speed);
+        if (turretMotor != null) {
+            turretMotor.setPower(speed);
+        }
     }
 
     @Override
     public void onStop() {
         speed = 0.0;
-        turretMotor.setPower(0.0);
+        if (turretMotor != null) {
+            turretMotor.setPower(0.0);
+        }
+        if (hoodServo != null) {
+            hoodServo.setPower(0.0);
+        }
     }
 
     public void adjustSpeed(double increment) {
@@ -51,11 +62,12 @@ public class TurretSubsystem extends Subsystem {
         if (!isAvailable())
             return;
 
-        power = Algebra.clamp(-1.0, 1.0, power);
-        if (Math.abs(power) < 0.05)
-            power = 0.0;
+        double clampedPower = Algebra.clamp(-1.0, 1.0, power);
+        final double finalPower = Math.abs(clampedPower) < 0.05 ? 0.0 : clampedPower;
 
-        hoodServo.setPower(power);
+        if (hoodServo != null) {
+            hoodServo.setPower(finalPower);
+        }
     }
 
     public void setSpeed(double newSpeed) {

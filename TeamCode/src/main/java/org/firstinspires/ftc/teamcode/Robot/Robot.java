@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Util.Logger;
@@ -15,6 +16,7 @@ public class Robot {
     public final ChassisSubsystem chassis;
     public final IntakeSubsystem intake;
     public final TurretSubsystem turret;
+    public final ShooterSubsystem shooter;
 
     private final List<Subsystem> subsystems;
 
@@ -22,11 +24,13 @@ public class Robot {
         chassis = new ChassisSubsystem(hardwareMap, logger);
         intake = new IntakeSubsystem(hardwareMap, logger);
         turret = new TurretSubsystem(hardwareMap, logger);
+        shooter = new ShooterSubsystem(hardwareMap, logger);
 
         subsystems = Arrays.asList(
                 chassis,
                 intake,
-                turret
+                turret,
+                shooter
         );
     }
 

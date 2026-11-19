@@ -22,9 +22,16 @@ public class MainTeleOp extends CustomOpMode {
                 y, x, rotation
         );
 
+        // Turret / Hood
         double hoodAdjustment = -1 * gm1.getStickPos(GamepadInput.RightStickY);
         robot.turret.adjustHood(hoodAdjustment);
         logger.debug("Turret: speed=%.2f",
                      robot.turret.getSpeed());
+
+        // Shooter Flywheel
+        double flywheelPower = gamepad1.right_trigger;
+        robot.shooter.setFlywheelPower(flywheelPower);
+        logger.debug("Shooter: flywheel=%.2f",
+                robot.shooter.getFlywheelPower());
     }
 }
