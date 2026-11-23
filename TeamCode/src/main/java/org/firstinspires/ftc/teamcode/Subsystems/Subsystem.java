@@ -48,7 +48,7 @@ public abstract class Subsystem {
         }
 
         available = false;
-        logger.debug(
+        logger.warn(
                 "Optional hardware missing: %s (%s)",
                 name,
                 type.getSimpleName()
