@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Util.Algebra;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class IntakeSubsystem extends Subsystem {
-    static double DESIRED_POWER = 1.0;
+    public static double DESIRED_POWER = 1.0;
 
     private final DcMotor intakeMotor;
     private double power = 0.0;
