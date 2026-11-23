@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Util.Algebra;
 import org.firstinspires.ftc.teamcode.Util.Logger;
 
 public class IntakeSubsystem extends Subsystem {
-    static final double POWER = 1.0;
+    static double DESIRED_POWER = 1.0;
 
     private final DcMotor intakeMotor;
     private double power = 0.0;
@@ -38,10 +39,17 @@ public class IntakeSubsystem extends Subsystem {
     public void toggle() {
         if (!isAvailable())
             return;
-        power = (power == 0.0) ? POWER : 0.0;
+
+        setPower(power != 0.0 ? 0.0 : DESIRED_POWER);
     }
 
+    public void adjustPower(double increment) {
+        setPower(power + increment);
+    }
     public double getPower() {
         return power;
+    }
+    public void setPower(double newPower) {
+        power = Algebra.clamp(-1.0, 1.0, newPower);
     }
 }
