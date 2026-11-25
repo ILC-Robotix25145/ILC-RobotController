@@ -31,10 +31,13 @@ public class MainTeleOp extends CustomOpMode {
                 "Turret: speed=%.2f, hood=%.4f, velocity=%.2f",
                 robot.turret.getSpeed(),
                 robot.turret.getHoodPosition(),
-                robot.turret.getEncoderVelocity()
+                robot.turret.getFlywheelVelocity()
         );
         if (robot.turret.didJustShoot())
             logger.infoLine("Just shot");
+
+        double turretDir = gm2.getStickPos(GamepadInput.LeftStickX);
+        robot.turret.setRotationSpeed(0.5 * turretDir);
 
         if (gm1.isJustDown(GamepadInput.Back))
             testingMode = !testingMode;
@@ -43,8 +46,6 @@ public class MainTeleOp extends CustomOpMode {
 
             int speedDir = gm1.getDirectionJustDown(GamepadInput.DpadRight, GamepadInput.DpadLeft);
             robot.turret.adjustSpeed(speedDir * 0.02);
-
-
 
             int intakeDir = gm1.getDirectionJustDown(GamepadInput.RightTrigger, GamepadInput.LeftTrigger);
             IntakeSubsystem.DESIRED_POWER = Algebra.clamp(-1.0, 1.0, IntakeSubsystem.DESIRED_POWER + intakeDir* 0.1);

@@ -18,8 +18,10 @@ public class TurretSubsystem extends Subsystem {
     private double previousVelocity = 0;
 
     private double speed = 0.0;
+    private double rotationSpeed = 0.0;
 
-    private final DcMotorEx turretMotor;
+    private final DcMotorEx flywheelMotor;
+    private final DcMotorEx rotationMotor;
     private final Servo hoodServo;
 
     private double hoodPosition = 0.0;
@@ -27,18 +29,22 @@ public class TurretSubsystem extends Subsystem {
     public TurretSubsystem(HardwareMap hardwareMap, Logger logger) {
         super(hardwareMap, logger, Requirement.OPTIONAL);
         logger.infoLine("Initializing Turret Subsystem");
-        turretMotor = getHardware(DcMotorEx.class, "turretMotor");
+        flywheelMotor = getHardware(DcMotorEx.class, "turretMotor");
+        rotationMotor = getHardware(DcMotorEx.class, "rotationMotor");
         hoodServo = getHardware(Servo.class, "hoodServo");
     }
 
     @Override
     public void onInit() {
-        turretMotor.setDirection(DcMotor.Direction.FORWARD);
-        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        turretMotor.setPower(speed);
+        flywheelMotor.setDirection(DcMotor.Direction.FORWARD);
+        flywheelMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flywheelMotor.setPower(speed);
 
-        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flywheelMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flywheelMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        rotationMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rotationMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         hoodServo.setDirection(Servo.Direction.FORWARD);
         setHoodPosition(hoodPosition);
@@ -46,9 +52,10 @@ public class TurretSubsystem extends Subsystem {
 
     @Override
     public void onLoop() {
-        turretMotor.setPower(speed);
+        flywheelMotor.setPower(speed);
+        rotationMotor.setPower(rotationSpeed);
 
-        double velocity = Math.abs(turretMotor.getVelocity());
+        double velocity = Math.abs(flywheelMotor.getVelocity());
         justShot = previousVelocity - velocity > SHOT_VELOCITY_DROP && previousVelocity > 200;
         previousVelocity = velocity;
     }
@@ -56,11 +63,12 @@ public class TurretSubsystem extends Subsystem {
     @Override
     public void onStop() {
         speed = 0.0;
-        turretMotor.setPower(0.0);
+        flywheelMotor.setPower(0.0);
+        rotationMotor.setPower(0.0);
     }
 
-    public double getEncoderVelocity() {
-        return turretMotor.getVelocity();
+    public double getFlywheelVelocity() {
+        return flywheelMotor.getVelocity();
     }
 
     public boolean didJustShoot() {
@@ -72,6 +80,17 @@ public class TurretSubsystem extends Subsystem {
             return;
 
         setSpeed(speed + increment);
+    }
+
+    public void adjustRotationSpeed(double increment) {
+        setRotationSpeed(rotationSpeed + increment);
+    }
+
+    public void setRotationSpeed(double value) {
+        if (!isAvailable())
+            return;
+
+        rotationSpeed = Algebra.clamp(-1.0, 1.0, value);
     }
 
     public void setSpeed(double value) {
