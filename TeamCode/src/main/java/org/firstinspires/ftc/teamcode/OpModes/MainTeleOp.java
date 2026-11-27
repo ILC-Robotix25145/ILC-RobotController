@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadInput;
 @TeleOp(name = "Main TeleOp")
 public class MainTeleOp extends CustomOpMode {
     boolean testingMode = false;
+    boolean slowMode = false;
 
     @Override
     public void onLoop() {
@@ -16,10 +17,12 @@ public class MainTeleOp extends CustomOpMode {
             robot.intake.toggle();
         logger.debug("Intake: power=%.2f DESIRED_POWER=%.2f", robot.intake.getPower(), IntakeSubsystem.DESIRED_POWER);
 
+        if (gm1.isJustDown(GamepadInput.LeftStickButton))
+            slowMode = !slowMode;
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rotation = gamepad1.right_stick_x;
-        double speedMultiplier = gm1.isDown(GamepadInput.LeftStickButton) ? 0.3 : 1.0;
+        double speedMultiplier = slowMode ? 0.3 : 1.0;
         robot.chassis.drive(y, x, rotation, speedMultiplier);
         logger.debug(
                 "Chassis: y=%.2f x=%.2f rotation=%.2f",
@@ -27,7 +30,7 @@ public class MainTeleOp extends CustomOpMode {
         );
 
         int hoodDir = gm1.getDirectionDown(GamepadInput.DpadUp, GamepadInput.DpadDown);
-        robot.turret.adjustHood(0.0001 * hoodDir);
+        robot.turret.adjustHood(0.001 * hoodDir);
         logger.debug(
                 "Turret: speed=%.2f, hood=%.4f, velocity=%.2f ticks/s (%.0f RPM)",
                 robot.turret.getSpeed(),
@@ -35,11 +38,16 @@ public class MainTeleOp extends CustomOpMode {
                 robot.turret.getFlywheelVelocity(),
                 robot.turret.getFlywheelRpm()
         );
-        if (robot.turret.didJustShoot())
-            logger.infoLine("Just shot");
 
         double turretDir = gm2.getStickPos(GamepadInput.LeftStickX);
         robot.turret.setRotationSpeed(0.5 * turretDir);
+
+        logger.debug(
+                "Pinpoint: X=%.2f cm, Y=%.2f cm, Heading=%.2f°",
+                robot.pinpoint.getX(),
+                robot.pinpoint.getY(),
+                robot.pinpoint.getHeadingDegrees()
+        );
 
         if (gm1.isJustDown(GamepadInput.Back))
             testingMode = !testingMode;

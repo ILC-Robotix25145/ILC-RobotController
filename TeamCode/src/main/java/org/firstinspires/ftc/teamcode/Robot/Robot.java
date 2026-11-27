@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ChassisSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.PinpointSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.Subsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.TurretSubsystem;
 import org.firstinspires.ftc.teamcode.Util.Logger;
@@ -15,6 +17,7 @@ public class Robot {
     public final ChassisSubsystem chassis;
     public final IntakeSubsystem intake;
     public final TurretSubsystem turret;
+    public final PinpointSubsystem pinpoint;
 
     private final List<Subsystem> subsystems;
 
@@ -22,11 +25,13 @@ public class Robot {
         chassis = new ChassisSubsystem(hardwareMap, logger);
         intake = new IntakeSubsystem(hardwareMap, logger);
         turret = new TurretSubsystem(hardwareMap, logger);
+        pinpoint = new PinpointSubsystem(hardwareMap, logger);
 
         subsystems = Arrays.asList(
                 chassis,
                 intake,
-                turret
+                turret,
+                pinpoint
         );
     }
 
