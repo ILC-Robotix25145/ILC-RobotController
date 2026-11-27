@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Util.Gamepad.GamepadInput;
 public class MainTeleOp extends CustomOpMode {
     boolean testingMode = false;
     boolean slowMode = false;
+    boolean autoAim = false;
 
     @Override
     public void onLoop() {
@@ -30,7 +31,7 @@ public class MainTeleOp extends CustomOpMode {
         );
 
         int hoodDir = gm1.getDirectionDown(GamepadInput.DpadUp, GamepadInput.DpadDown);
-        robot.turret.adjustHood(0.001 * hoodDir);
+        robot.turret.adjustHood(0.01 * hoodDir);
         logger.debug(
                 "Turret: speed=%.2f, hood=%.4f, velocity=%.2f ticks/s (%.0f RPM)",
                 robot.turret.getSpeed(),
@@ -39,8 +40,6 @@ public class MainTeleOp extends CustomOpMode {
                 robot.turret.getFlywheelRpm()
         );
 
-        double turretDir = gm2.getStickPos(GamepadInput.LeftStickX);
-        robot.turret.setRotationSpeed(0.5 * turretDir);
 
         logger.debug(
                 "Pinpoint: X=%.2f cm, Y=%.2f cm, Heading=%.2f°",
@@ -48,6 +47,19 @@ public class MainTeleOp extends CustomOpMode {
                 robot.pinpoint.getY(),
                 robot.pinpoint.getHeadingDegrees()
         );
+
+        if (gm1.isJustDown(GamepadInput.RightStickButton))
+            autoAim = !autoAim;
+        if (autoAim) {
+            robot.turret.autoAim(
+                    57.0, 52.0,
+                    robot.pinpoint.getX(), robot.pinpoint.getY(),
+                    robot.pinpoint.getHeadingDegrees());
+        } else {
+            double turretDir = gm2.getStickPos(GamepadInput.LeftStickX);
+            robot.turret.setRotationSpeed(0.5 * turretDir);
+        }
+        logger.debug("Turret ticks=%d angle=%.1f°", robot.turret.getRotationTicks(), robot.turret.getTurretAngleDeg());
 
         if (gm1.isJustDown(GamepadInput.Back))
             testingMode = !testingMode;
@@ -62,3 +74,6 @@ public class MainTeleOp extends CustomOpMode {
         }
     }
 }
+
+// 252 * 360 / 90
+// -247 * 360 / -20

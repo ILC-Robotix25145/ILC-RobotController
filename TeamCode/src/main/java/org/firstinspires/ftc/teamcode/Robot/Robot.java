@@ -22,16 +22,16 @@ public class Robot {
     private final List<Subsystem> subsystems;
 
     public Robot(HardwareMap hardwareMap, Logger logger) {
+        pinpoint = new PinpointSubsystem(hardwareMap, logger);
         chassis = new ChassisSubsystem(hardwareMap, logger);
         intake = new IntakeSubsystem(hardwareMap, logger);
         turret = new TurretSubsystem(hardwareMap, logger);
-        pinpoint = new PinpointSubsystem(hardwareMap, logger);
 
         subsystems = Arrays.asList(
+                pinpoint,
                 chassis,
                 intake,
-                turret,
-                pinpoint
+                turret
         );
     }
 

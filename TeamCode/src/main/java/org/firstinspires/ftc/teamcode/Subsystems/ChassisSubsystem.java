@@ -8,7 +8,8 @@ import org.firstinspires.ftc.teamcode.Util.Logger;
 public class ChassisSubsystem extends Subsystem {
     public static double STRAFE_MULTIPLIER = 1.1;
     public static double DEADZONE = 0.05;
-    private static final double SMOOTHING = 0.2;
+    private static final double ACCEL_SMOOTHING = 0.2;
+    private static final double DECEL_SMOOTHING = 0.8;
     private static final double DRIVE_EXPONENT = 2.0;
     private static final double ROTATION_EXPONENT = 1.5;
     private static final double MAX_DRIVE_POWER = 0.75;
@@ -86,9 +87,9 @@ public class ChassisSubsystem extends Subsystem {
         x = applyCurve(x, DRIVE_EXPONENT);
         rotation = applyCurve(rotation, ROTATION_EXPONENT);
 
-        smoothY = SMOOTHING * smoothY + (1 - SMOOTHING) * y;
-        smoothX = SMOOTHING * smoothX + (1 - SMOOTHING) * x;
-        smoothRotation = SMOOTHING * smoothRotation + (1 - SMOOTHING) * rotation;
+        smoothY = smooth(smoothY, y,  Math.abs(y) < Math.abs(smoothY) || smoothY * y < 0 ? DECEL_SMOOTHING : ACCEL_SMOOTHING);
+        smoothX = smooth(smoothX, x,  Math.abs(x) < Math.abs(smoothX) || smoothX * x < 0 ? DECEL_SMOOTHING : ACCEL_SMOOTHING);
+        smoothRotation = smooth(smoothRotation, rotation, Math.abs(rotation) < Math.abs(smoothRotation) || smoothRotation * rotation < 0 ? DECEL_SMOOTHING : ACCEL_SMOOTHING);
 
         y = smoothY;
         x = smoothX;
@@ -111,6 +112,10 @@ public class ChassisSubsystem extends Subsystem {
         backLeftPower = bl / denominator * MAX_DRIVE_POWER * speedMultiplier;
         frontRightPower = fr / denominator * MAX_DRIVE_POWER * speedMultiplier;
         backRightPower = br / denominator * MAX_DRIVE_POWER * speedMultiplier;
+    }
+
+    private double smooth(double current, double target, double smoothing) {
+        return smoothing * current + (1.0 - smoothing) * target;
     }
 
     private double applyCurve(double value, double exponent) {
