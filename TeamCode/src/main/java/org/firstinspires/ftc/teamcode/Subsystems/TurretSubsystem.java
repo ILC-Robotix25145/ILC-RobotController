@@ -26,6 +26,7 @@ public class TurretSubsystem extends Subsystem {
 
     private double speed = 0.0;
     private double rotationSpeed = 0.0;
+    private int turretRotationTicks = 0;
 
     private final DcMotorEx flywheelMotor;
     private final DcMotorEx flywheelMotor2;
@@ -75,6 +76,7 @@ public class TurretSubsystem extends Subsystem {
         flywheelMotor2.setPower(speed);
         rotationMotor.setPower(rotationSpeed);
 
+        turretRotationTicks = rotationMotor.getCurrentPosition();
         double velocity = readFlywheelVelocity();
         justShot = previousVelocity - velocity > SHOT_VELOCITY_DROP && previousVelocity > 200;
         previousVelocity = velocity;

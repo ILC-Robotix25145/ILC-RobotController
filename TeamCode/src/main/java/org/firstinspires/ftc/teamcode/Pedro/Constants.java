@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.Pedro;
 
 import com.pedropathing.algorithm.Foresight;
@@ -34,9 +33,9 @@ public class Constants {
     public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
         c.name.set("pinpoint");
         c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        c.xPodOffset.set(-1.4625107772707002);
-        c.yPodOffset.set(-3.292679962680096E-5);
-        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        c.xPodOffset.set(1.1396607076089214);
+        c.yPodOffset.set(2.3961534274844674);
+        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
         c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
         c.globalDistanceUnit.set(DistanceUnit.INCH);
         c.offsetUnits.set(DistanceUnit.INCH);
@@ -44,6 +43,9 @@ public class Constants {
 
     public static ForesightConfig foresightConfig = new ForesightConfig(
             c -> {
+                c.maxBrakingPower.set(0.12);
+                c.maxVelocityConstraint.set(45.0);
+
                 Controller primaryTranslationalForward = Controller.proportional(0.2867508051835807);
                 Controller secondaryTranslationalForward = Controller.proportional(0.10594676039270322);
                 Controller primaryTranslationalLateral = Controller.proportional(0.43405146324218896);
