@@ -19,7 +19,8 @@ public class MainTeleOp extends CustomOpMode {
         double y = -gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rotation = gamepad1.right_stick_x;
-        robot.chassis.drive(y, x, rotation);
+        double speedMultiplier = gm1.isDown(GamepadInput.LeftStickButton) ? 0.3 : 1.0;
+        robot.chassis.drive(y, x, rotation, speedMultiplier);
         logger.debug(
                 "Chassis: y=%.2f x=%.2f rotation=%.2f",
                 y, x, rotation
